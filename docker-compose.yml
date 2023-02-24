@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+
+  laravel:
+    container_name: todo-app
+    build: 
+      context: .
+    ports:
+      - 80:80
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - todo-network
+
+  database:
+    container_name: todo-db
+    image: mariadb:latest
+    ports:
+      - ${DB_PORT}:3306
+    environment:
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - todo-volume:/var/lib/mysql
+    networks:
+      - todo-network
+
+volumes:
+  todo-volume:
+
+networks:
+  todo-network:
+    driver: bridge
